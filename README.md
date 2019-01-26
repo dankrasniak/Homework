@@ -1,6 +1,6 @@
 # Homework
 
-Create a class RangeSet which implements java.util.Set<Integer>
+Create a class rangeSet.RangeSet which implements java.util.Set<Integer>
 This class should be optimized to keep ranges of integer values, not individual 
 in order to efficiently handle long ranges (e.g. keep milion integers).
 We would like to be able to use it like this:

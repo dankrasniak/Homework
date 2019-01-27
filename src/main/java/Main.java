@@ -33,6 +33,7 @@ public class Main {
         System.out.println(set.contains(19)); //true
         System.out.println(set.contains(36)); //true
         System.out.println(set.contains(2)); //true
+        System.out.println(set.contains(2)); //true
 
         System.out.println(set.contains(3)); //false
         System.out.println(set.contains(35)); //false

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class RangeSet implements java.util.Set<Integer> {
 
@@ -27,12 +28,12 @@ public class RangeSet implements java.util.Set<Integer> {
         boolean setChanged = true;
         Range rangeToBeAdded = new Range(start, end);
 
-        LinkedList<Range> toBeMerged = takeOutCollidingRanges(rangeToBeAdded);
+        LinkedList<Range> toBeMergedList = takeOutCollidingRanges(rangeToBeAdded);
 
-        if (!toBeMerged.isEmpty()) {
-            if (toBeMerged.size() == 1 && rangeToBeAdded.includedWithin(toBeMerged.getFirst()))
+        if (!toBeMergedList.isEmpty()) {
+            if (toBeMergedList.size() == 1 && toBeMergedList.getFirst().contains(rangeToBeAdded))
                 setChanged = false;
-            rangeToBeAdded.mergeWith(toBeMerged);
+            rangeToBeAdded.mergeWith(toBeMergedList);
         }
         place(rangeToBeAdded);
 
@@ -122,12 +123,12 @@ public class RangeSet implements java.util.Set<Integer> {
 
     @Override
     public Object[] toArray() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public <Integer> Integer[] toArray(Integer[] a) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -137,7 +138,7 @@ public class RangeSet implements java.util.Set<Integer> {
 
     @Override
     public boolean remove(Object arg) {
-        Integer value = (Integer)arg;
+        Integer value = (Integer) arg;
         ListIterator<Range> iter = ranges.listIterator();
 
         while (iter.hasNext()) {
@@ -157,8 +158,8 @@ public class RangeSet implements java.util.Set<Integer> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        Collection<Integer> digits = (Collection<Integer>) c;
+    public boolean containsAll(Collection<?> arg) {
+        Collection<Integer> digits = (Collection<Integer>) arg;
 
         for (Range current : ranges)
             if (!digits.stream().allMatch(current::contains))
@@ -173,8 +174,12 @@ public class RangeSet implements java.util.Set<Integer> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        throw new NotImplementedException();
+    public boolean retainAll(Collection<?> arg) {
+        Collection<Integer> digits = (Collection<Integer>) arg;
+
+        Collection intersectingValues = digits.stream().filter(this::contains).collect(Collectors.toList());
+        clear();
+        return this.addAll(intersectingValues);
     }
 
     @Override

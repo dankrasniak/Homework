@@ -43,6 +43,10 @@ public class Range implements Iterable {
         return digit >= getStart() && digit < getEnd();
     }
 
+    public boolean contains(Range rangeContained) {
+        return rangeContained.getStart() >= getStart() && rangeContained.getEnd() <= getEnd();
+    }
+
     public Optional<Range> remove(Integer digit) {
 
         if (Objects.equals(digit, getStart()))
@@ -67,10 +71,6 @@ public class Range implements Iterable {
 
     public boolean shouldBePlacedBefore(Range comparedRange) {
         return this.getStart() < comparedRange.getStart();
-    }
-
-    public boolean includedWithin(Range toBeMerged) {
-        return getStart() > toBeMerged.getStart() && getEnd() < toBeMerged.getEnd();
     }
 
     @Override
